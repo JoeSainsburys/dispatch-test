@@ -15,6 +15,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v3
         with:
+          token: ${{ secrets.PAT }}
           body: |
             blah
             https://github.com/JoeSainsburys/example-repo/pull/1
