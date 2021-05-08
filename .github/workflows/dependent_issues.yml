@@ -19,3 +19,7 @@ jobs:
       - uses: z0al/dependent-issues@v1
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
+      - name: merge if poss
+        uses: "pascalgn/automerge-action@v0.13.1"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
