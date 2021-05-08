@@ -9,11 +9,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run a multi-line script
         run: |
-          git checkout -b "pr-$GITHUB_RUN_ID"
           date >> foo.txt
           git add foo.txt
-          git commit -m "example commit"
-          git push "HEAD:pr-$GITHUB_RUN_ID"
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v3
