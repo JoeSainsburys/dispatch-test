@@ -1,0 +1,27 @@
+name: CI
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run a multi-line script
+        run: |
+          git checkout -b "pr-$GITHUB_RUN_ID"
+          date >> foo.txt
+          git add foo.txt
+          git commit -m "example commit"
+          git push "HEAD:pr-$GITHUB_RUN_ID"
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          body: |
+            blah
+            https://github.com/JoeSainsburys/example-repo/pull/1
+      - name: Check outputs
+        run: |
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
