@@ -12,7 +12,7 @@ jobs:
       - name: Run a multi-line script
         run: |
           date >> foo.txt
-          echo "Triggered by PR ${{ github.event.client_payload.sourcePrNumber }} (${{ github.event.client_payload.sha }})" >> foo.txt
+          echo "Triggered by PR ${{ github.event.client_payload.sourcePrNumber }} (${{ github.event.client_payload.sourceBaseRef }} => ${{ github.event.client_payload.sourceHeadRef }})" >> foo.txt
           git add foo.txt
       - name: Create Pull Request
         id: cpr
