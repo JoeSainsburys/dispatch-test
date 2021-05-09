@@ -30,8 +30,8 @@ jobs:
             console.log(JSON.stringify(context))
             console.log(JSON.stringify(github))
             github.issues.createComment({
-              issue_number:  github.context.event.client_payload.sourcePrNumber,
-              owner:  github.context.event.client_payload.sourceOwner,
-              repo:  github.context.event.client_payload.sourceRepo,
+              issue_number:  context.payload.client_payload.sourcePrNumber,
+              owner:  context.payload.client_payload.sourceOwner,
+              repo:  context.payload.client_payload.sourceRepo,
               body: 'Resultant changes: ${{ steps.cpr.outputs.pull-request-url }}'
             })
