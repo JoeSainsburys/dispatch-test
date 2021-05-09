@@ -23,7 +23,7 @@ jobs:
             Triggered by ${{ github.event.client_payload.uuid }}
             Depends on https://github.com/${{ github.event.client_payload.sourceOwner }}/${{ github.event.client_payload.sourceRepo }}/pull/${{ github.event.client_payload.sourcePrNumber }}
       - uses: actions/github-script@v4
-        if: ${{ steps.cpr.outputs.pull-request-operation == "created" }}
+        if: steps.cpr.outputs.pull-request-operation == "created"
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
