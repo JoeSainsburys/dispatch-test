@@ -23,13 +23,15 @@ jobs:
             Triggered by ${{ github.event.client_payload.uuid }}
             Depends on https://github.com/${{ github.event.client_payload.sourceOwner }}/${{ github.event.client_payload.sourceRepo }}/pull/${{ github.event.client_payload.sourcePrNumber }}
       - uses: actions/github-script@v4
-        if: ${{ steps.cpr.outputs.pull-request-operation == 'created' }}
+        #if: ${{ steps.cpr.outputs.pull-request-operation == 'created' }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
+            console.log(JSON.stringify(context))
+            console.log(JSON.stringify(github))
             github.issues.createComment({
-              issue_number:  github.event.client_payload.sourcePrNumber,
-              owner:  github.event.client_payload.sourceOwner,
-              repo:  github.event.client_payload.sourceRepo,
+              issue_number:  github.context.event.client_payload.sourcePrNumber,
+              owner:  github.context.event.client_payload.sourceOwner,
+              repo:  github.context.event.client_payload.sourceRepo,
               body: 'Resultant changes: ${{ steps.cpr.outputs.pull-request-url }}'
             })
