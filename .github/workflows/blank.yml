@@ -12,7 +12,7 @@ jobs:
       - name: Run a multi-line script
         run: |
           date >> foo.txt
-          echo "Triggered by PR ${{ github.event.client_payload.sourcePrNumber }} (${{ github.event.client_payload.uuid }})" >> foo.txt
+          echo "Triggered by PR ${{ github.event.client_payload.sourcePrNumber }} (${{ github.event.client_payload.sha }})" >> foo.txt
           git add foo.txt
       - name: Create Pull Request
         id: cpr
@@ -21,4 +21,15 @@ jobs:
           token: ${{ secrets.PAT }}
           body: |
             Triggered by ${{ github.event.client_payload.uuid }}
-            Depends on https://github.com/JoeSainsburys/example-repo/pull/${{ github.event.client_payload.sourcePrNumber }}
+            Depends on https://github.com/${{ github.event.client_payload.sourceOwner }}/${{ github.event.client_payload.sourceRepo }}/pull/${{ github.event.client_payload.sourcePrNumber }}
+      - uses: actions/github-script@v4
+        if: ${{ steps.cpr.outputs.pull-request-operation == "created" }}
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: github.event.client_payload.sourceOwner,
+              repo: github.event.client_payload.sourceRepo,
+              body: 'Resultant changes: ${{ steps.cpr.outputs.pull-request-url }}'
+            })
