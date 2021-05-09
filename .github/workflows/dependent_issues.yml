@@ -21,5 +21,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT }}
       - name: merge if poss
         uses: "pascalgn/automerge-action@v0.13.1"
+        with:
+          MERGE_LABELS: ""
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
