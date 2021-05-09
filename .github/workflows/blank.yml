@@ -12,7 +12,7 @@ jobs:
       - name: Run a multi-line script
         run: |
           date >> foo.txt
-          echo "Triggered by PR ${{ github.event.client_payload.sourcePrNumber }}" >> foo.txt
+          echo "Triggered by PR ${{ github.event.client_payload.sourcePrNumber }} (${{ github.event.client_payload.uuid }})" >> foo.txt
           git add foo.txt
       - name: Create Pull Request
         id: cpr
@@ -20,5 +20,5 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           body: |
-            blah
-            https://github.com/JoeSainsburys/example-repo/pull/${{ github.event.client_payload.sourcePrNumber }}
+            Triggered by ${{ github.event.client_payload.uuid }}
+            Depends on https://github.com/JoeSainsburys/example-repo/pull/${{ github.event.client_payload.sourcePrNumber }}
