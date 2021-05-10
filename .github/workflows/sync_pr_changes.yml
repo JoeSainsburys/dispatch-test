@@ -14,6 +14,7 @@ jobs:
           date >> foo.txt
           echo "Triggered by PR ${{ github.event.client_payload.sourcePrNumber }} (${{ github.event.client_payload.sourceBaseRef }} => ${{ github.event.client_payload.sourceHeadRef }})" >> foo.txt
           git add foo.txt
+          git commit -m "Automated commit"
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v3
