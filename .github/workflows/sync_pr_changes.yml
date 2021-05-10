@@ -1,5 +1,4 @@
 name: sync_pr_changes
-name: CI
 on:
   workflow_dispatch:
   repository_dispatch:
@@ -41,8 +40,6 @@ jobs:
         with:
           github-token: ${{ secrets.PAT }}
           script: |
-            console.log(JSON.stringify(context))
-            console.log(JSON.stringify(github))
             github.issues.createComment({
               issue_number:  context.payload.client_payload.sourcePrNumber,
               owner:  context.payload.client_payload.sourceOwner,
