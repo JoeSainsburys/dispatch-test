@@ -37,6 +37,15 @@ jobs:
         with:
           github-token: ${{ secrets.PAT }}
           script: |
+            const existingPrs = await octokit.request('GET /repos/{owner}/{repo}/pulls', {
+              owner: 'octocat',
+              repo: 'hello-world',
+              head: '${{ env.pr_branch_name }}',
+              base: 'main'
+            });
+            if (existingPrs.length){
+              return;
+            }
             const resp = await github.pulls.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
