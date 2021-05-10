@@ -26,11 +26,11 @@ jobs:
           date >> foo.txt
           echo "Triggered by PR ${{ github.event.client_payload.sourcePrNumber }} (${{ github.event.client_payload.sourceBaseRef }} => ${{ github.event.client_payload.sourceHeadRef }})" >> foo.txt
           git add foo.txt
-          git commit -m "Automated commit"
+          git commit -m "Automated commit" --allow-empty
           #if [[ -z "$EXISTING_BRANCH" ]]; then
           #  git push 
           #else
-            git push origin "HEAD:$pr_branch_name"
+            git push origin "HEAD:$pr_branch_name" -f
           #fi
       - name: Create Pull Request
         uses: actions/github-script@v2
