@@ -40,9 +40,10 @@ jobs:
             const existingPrs = await github.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head: '${{ env.pr_branch_name }}',
+              //head: '${{ env.pr_branch_name }}',
               base: 'main'
             });
+            console.log(existingPrs);
             if (existingPrs.length){
               return;
             }
