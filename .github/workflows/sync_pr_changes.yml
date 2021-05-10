@@ -37,7 +37,7 @@ jobs:
         with:
           github-token: ${{ secrets.PAT }}
           script: |
-            const existingPrs = await github.pulls.get({
+            const existingPrs = await github.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
               head: '${{ env.pr_branch_name }}',
