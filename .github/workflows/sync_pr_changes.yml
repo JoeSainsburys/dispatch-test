@@ -11,21 +11,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        continue-on-error: true
-        with:
-          ref: ${{ env.pr_branch_name }}
-      - uses: actions/checkout@v2
-        if: failure()
       - name: Run a multi-line script
         run: |
-          set -e
+          set -ex
           git config --global user.name "$GITHUB_ACTOR"
           git config --global user.email action@github.com
+          git fetch --all
+          if git branch | grep "$pr_branch_name"; then
+            EXISTING_BRANCH=1
+            git checkout "$pr_branch_name"
+          fi
           date >> foo.txt
           echo "Triggered by PR ${{ github.event.client_payload.sourcePrNumber }} (${{ github.event.client_payload.sourceBaseRef }} => ${{ github.event.client_payload.sourceHeadRef }})" >> foo.txt
           git add foo.txt
-          git commit -m "Automated commit"
-          git push || true
+          if [[ -n "$EXISTING_BRANCH" ]]; then
+            git commit -m "Updated existing branch"
+            git push
+          fi
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v3
