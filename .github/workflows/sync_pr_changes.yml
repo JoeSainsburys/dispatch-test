@@ -13,6 +13,8 @@ jobs:
         run: |
           date >> foo.txt
           echo "Triggered by PR ${{ github.event.client_payload.sourcePrNumber }} (${{ github.event.client_payload.sourceBaseRef }} => ${{ github.event.client_payload.sourceHeadRef }})" >> foo.txt
+          git config --global user.name "$GITHUB_ACTOR"
+          git config --global user.email action@github.com
           git add foo.txt
           git commit -m "Automated commit"
       - name: Create Pull Request
