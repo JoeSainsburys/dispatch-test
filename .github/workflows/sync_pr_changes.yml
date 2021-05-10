@@ -41,7 +41,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: 'Automated PR',
-              head: ${{ env.pr_branch_name }},
+              head: '${{ env.pr_branch_name }}',
               base: 'main',
               body: 'Depends on https://github.com/${{ github.event.client_payload.sourceOwner }}/${{ github.event.client_payload.sourceRepo }}/pull/${{ github.event.client_payload.sourcePrNumber }}',
               maintainer_can_modify: true
