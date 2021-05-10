@@ -26,7 +26,7 @@ jobs:
           git add foo.txt
           if [[ -n "$EXISTING_BRANCH" ]]; then
             git commit -m "Updated existing branch"
-            git push
+            #git push
           fi
       - name: Create Pull Request
         id: cpr
