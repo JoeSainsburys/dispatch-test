@@ -11,6 +11,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run a multi-line script
         run: |
+          git fetch --all
           git checkout "${{ github.event.client_payload.sourceRepo }}-${{ github.event.client_payload.sourcePrNumber }}" || export FIRST_RUN=true
           date >> foo.txt
           echo "Triggered by PR ${{ github.event.client_payload.sourcePrNumber }} (${{ github.event.client_payload.sourceBaseRef }} => ${{ github.event.client_payload.sourceHeadRef }})" >> foo.txt
