@@ -1,7 +1,9 @@
 name: Dependent Issues
 
 on:
-  push:
+  repository_dispatch:
+    types:
+      - dependent_issues
   issues:
     types:
       - opened
