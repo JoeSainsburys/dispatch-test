@@ -1,4 +1,4 @@
-name: create_pr
+name: sync_pr_changes
 on:
   workflow_dispatch:
   repository_dispatch:
