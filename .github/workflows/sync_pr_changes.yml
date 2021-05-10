@@ -44,7 +44,7 @@ jobs:
               base: 'main'
             });
             console.log(existingPrs);
-            if (existingPrs.length){
+            if (existingPrs && existingPrs.data && existingPrs.data.length){
               return;
             }
             const prCreated = await github.pulls.create({
