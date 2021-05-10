@@ -24,3 +24,5 @@ jobs:
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           MERGE_LABELS: ""
+          MERGE_RETRIES: 0
+          MERGE_DELETE_BRANCH: true
