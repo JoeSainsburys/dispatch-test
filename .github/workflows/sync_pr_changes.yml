@@ -31,7 +31,7 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.PAT }}
-          base: $default-branch
+          base: main
           branch: ${{ env.pr_branch_name }}
           delete-branch: true
           body: |
