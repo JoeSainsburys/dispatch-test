@@ -27,11 +27,11 @@ jobs:
           echo "Triggered by PR ${{ github.event.client_payload.sourcePrNumber }} (${{ github.event.client_payload.sourceBaseRef }} => ${{ github.event.client_payload.sourceHeadRef }})" >> foo.txt
           git add foo.txt
           git commit -m "Automated commit"
-          if [[ -z "$EXISTING_BRANCH" ]]; then
-            git push 
-          else
+          #if [[ -z "$EXISTING_BRANCH" ]]; then
+          #  git push 
+          #else
             git push origin "HEAD:$pr_branch_name"
-          fi
+          #fi
       - name: Create Pull Request
         uses: actions/github-script@v2
         with:
@@ -40,7 +40,7 @@ jobs:
             const existingPrs = await github.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              //head: '${{ env.pr_branch_name }}',
+              head: '${{ env.pr_branch_name }}',
               base: 'main'
             });
             console.log(existingPrs);
