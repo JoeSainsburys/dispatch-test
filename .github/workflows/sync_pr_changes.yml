@@ -1,4 +1,5 @@
 name: sync_pr_changes
+name: CI
 on:
   workflow_dispatch:
   repository_dispatch:
@@ -6,18 +7,45 @@ on:
       - onboarding_pr
 jobs:
   build:
+    env:
+      pr_branch_name: "${{ github.event.client_payload.sourceRepo }}-${{ github.event.client_payload.sourcePrNumber }}"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        continue-on-error: true
+        with:
+          ref: ${{ env.pr_branch_name }}
+      - uses: actions/checkout@v2
+        if: failure()
       - name: Run a multi-line script
         run: |
-          git fetch --all
-          git checkout "${{ github.event.client_payload.sourceRepo }}-${{ github.event.client_payload.sourcePrNumber }}" || export FIRST_RUN=true
+          set -e
+          git config --global user.name "$GITHUB_ACTOR"
+          git config --global user.email action@github.com
           date >> foo.txt
           echo "Triggered by PR ${{ github.event.client_payload.sourcePrNumber }} (${{ github.event.client_payload.sourceBaseRef }} => ${{ github.event.client_payload.sourceHeadRef }})" >> foo.txt
           git add foo.txt
-          if [[ -n "$FIRST_RUN" ]]; then exit 0; fi
-          git config --global user.name "$GITHUB_ACTOR"
-          git config --global user.email action@github.com
           git commit -m "Automated commit"
-          git push
+          git push || true
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.PAT }}
+          branch: ${{ env.pr_branch_name }}
+          delete-branch: true
+          body: |
+            Depends on https://github.com/${{ github.event.client_payload.sourceOwner }}/${{ github.event.client_payload.sourceRepo }}/pull/${{ github.event.client_payload.sourcePrNumber }}
+      - uses: actions/github-script@v4
+        if: ${{ steps.cpr.outputs.pull-request-operation == 'created' }}
+        with:
+          github-token: ${{ secrets.PAT }}
+          script: |
+            console.log(JSON.stringify(context))
+            console.log(JSON.stringify(github))
+            github.issues.createComment({
+              issue_number:  context.payload.client_payload.sourcePrNumber,
+              owner:  context.payload.client_payload.sourceOwner,
+              repo:  context.payload.client_payload.sourceRepo,
+              body: 'Resultant changes: ${{ steps.cpr.outputs.pull-request-url }}'
+            })
