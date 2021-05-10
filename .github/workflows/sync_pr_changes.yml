@@ -65,7 +65,5 @@ jobs:
       - name: Repository Dispatch
         uses: felixp8/dispatch-and-wait@v0.1.0
         with:
-          owner: ${{ context.repo.owner }}
-          repo: ${{ context.repo.repo }}
           token: ${{ secrets.PAT }}
           event_type: dependent_issues
