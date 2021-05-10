@@ -20,23 +20,3 @@ jobs:
           git config --global user.email action@github.com
           git commit -m "Automated commit"
           git push
-      - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.PAT }}
-          branch: "${{ github.event.client_payload.sourceRepo }}-${{ github.event.client_payload.sourcePrNumber }}"
-          delete-branch: true
-          body: |
-            Depends on https://github.com/${{ github.event.client_payload.sourceOwner }}/${{ github.event.client_payload.sourceRepo }}/pull/${{ github.event.client_payload.sourcePrNumber }}
-      - uses: actions/github-script@v4
-        if: ${{ steps.cpr.outputs.pull-request-operation == 'created' }}
-        with:
-          github-token: ${{ secrets.PAT }}
-          script: |
-            github.issues.createComment({
-              issue_number:  context.payload.client_payload.sourcePrNumber,
-              owner:  context.payload.client_payload.sourceOwner,
-              repo:  context.payload.client_payload.sourceRepo,
-              body: 'Resultant changes: ${{ steps.cpr.outputs.pull-request-url }}'
-            })
